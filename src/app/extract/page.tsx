@@ -19,7 +19,6 @@ import {
   saveSearchToHistory,
 } from "@/lib/history-storage";
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
 
 type Lead = CleanLead;
 
@@ -207,9 +206,6 @@ function StepStatus({
 }
 
 export default function ExtractPage() {
-  const searchParams = useSearchParams();
-  const searchIdFromQuery = searchParams.get("searchId");
-
   const [businessCategory, setBusinessCategory] = useState("");
   const [location, setLocation] = useState("");
   const [maxResults, setMaxResults] = useState(100);
@@ -278,6 +274,7 @@ export default function ExtractPage() {
       setRecentSearchSelectedId(last.id);
     }
 
+    const searchIdFromQuery = new URLSearchParams(window.location.search).get("searchId");
     if (searchIdFromQuery) {
       const entry = loadSearchById(searchIdFromQuery);
       if (entry) {
@@ -312,7 +309,7 @@ export default function ExtractPage() {
         setRecentSearchSelectedId(entry.id);
       }
     }
-  }, [searchIdFromQuery]);
+  }, []);
 
   const filteredLeads = useMemo(() => {
     if (!result) return [];
@@ -515,6 +512,8 @@ export default function ExtractPage() {
         leads: stored.leads,
         warning: stored.warning ?? null,
       });
+
+      setRecentSearchSelectedId(entryId);
 
       setRecentSearches(
         loadSearchHistory()
