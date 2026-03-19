@@ -435,6 +435,159 @@ export default function Home() {
   const providerLabel =
     result?.provider === "openstreetmap" ? "OpenStreetMap" : "Google Maps";
 
+  if (true) {
+    return (
+      <div className="space-y-8">
+        <section className="ui-surface p-6 sm:p-8">
+          <div className="grid items-center gap-8 md:grid-cols-12">
+            <div className="md:col-span-7">
+              <div className="inline-flex items-center gap-2 rounded-full bg-ui-subtle px-3 py-1 text-xs font-semibold text-ui-text">
+                <Sparkles size={14} /> No login required
+              </div>
+
+              <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+                Extract Business Leads from Google Maps in Seconds
+              </h1>
+              <p className="mt-3 max-w-2xl text-sm text-ui-muted sm:text-base">
+                Get emails, phone numbers, and addresses instantly. No manual work.
+              </p>
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <a
+                  href="/extract"
+                  className="ui-button-primary inline-flex h-12 items-center justify-center gap-2 px-5"
+                >
+                  Extract Leads Now
+                </a>
+              </div>
+
+              <ul className="mt-6 space-y-2 text-sm text-ui-muted">
+                <li className="flex items-start gap-2">
+                  <span className="mt-0.5 inline-flex">
+                    <Check size={16} className="text-ui-primary" />
+                  </span>
+                  <span>Fast extraction</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-0.5 inline-flex">
+                    <Check size={16} className="text-ui-primary" />
+                  </span>
+                  <span>Export to CSV</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-0.5 inline-flex">
+                    <Check size={16} className="text-ui-primary" />
+                  </span>
+                  <span>No login required</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="md:col-span-5">
+              <div className="rounded-2xl border border-ui-border bg-ui-subtle p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-base font-semibold">Polished, export-ready output</div>
+                    <div className="mt-1 text-sm text-ui-muted">
+                      Verified leads you can copy or download immediately.
+                    </div>
+                  </div>
+                  <div className="rounded-xl bg-ui-primary text-white px-3 py-2 text-sm font-semibold">
+                    Free
+                  </div>
+                </div>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-xl bg-ui-surface border border-ui-border p-3">
+                    <div className="text-xs font-semibold text-ui-muted">Speed</div>
+                    <div className="mt-1 text-sm font-semibold text-ui-text">Fast extraction</div>
+                  </div>
+                  <div className="rounded-xl bg-ui-surface border border-ui-border p-3">
+                    <div className="text-xs font-semibold text-ui-muted">Export</div>
+                    <div className="mt-1 text-sm font-semibold text-ui-text">CSV download</div>
+                  </div>
+                  <div className="rounded-xl bg-ui-surface border border-ui-border p-3 sm:col-span-2">
+                    <div className="text-xs font-semibold text-ui-muted">Trust</div>
+                    <div className="mt-1 text-sm font-semibold text-ui-text">
+                      Fast &amp; reliable • 100+ searches
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <div className="rounded-xl border border-ui-border bg-ui-subtle px-3 py-1 text-xs font-semibold text-ui-muted">
+                  No login required
+                </div>
+                <div className="rounded-xl border border-ui-border bg-ui-subtle px-3 py-1 text-xs font-semibold text-ui-muted">
+                  Fast &amp; reliable
+                </div>
+                <div className="rounded-xl border border-ui-border bg-ui-subtle px-3 py-1 text-xs font-semibold text-ui-muted">
+                  Free to use
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="how-it-works" className="ui-surface p-5 sm:p-6">
+          <h2 className="text-base font-semibold">How it works</h2>
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            <div className="rounded-xl border border-ui-border bg-ui-surface p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-ui-primary text-white font-semibold">
+                  1
+                </div>
+                <div className="font-semibold">Enter search</div>
+              </div>
+              <div className="mt-2 text-sm text-ui-muted">
+                Add a business category and location.
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-ui-border bg-ui-surface p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-ui-primary text-white font-semibold">
+                  2
+                </div>
+                <div className="font-semibold">Extract</div>
+              </div>
+              <div className="mt-2 text-sm text-ui-muted">
+                We scrape, verify, and prepare contacts.
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-ui-border bg-ui-surface p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-ui-primary text-white font-semibold">
+                  3
+                </div>
+                <div className="font-semibold">Download</div>
+              </div>
+              <div className="mt-2 text-sm text-ui-muted">
+                Copy emails/phones or export to CSV.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="ui-surface p-5 sm:p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-base font-semibold">Start in seconds</h2>
+              <p className="mt-1 text-sm text-ui-muted">
+                No login required. Just extract and export.
+              </p>
+            </div>
+            <a href="/extract" className="ui-button-primary inline-flex h-11 items-center justify-center gap-2 px-5">
+              Extract Leads Now
+            </a>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-ui-bg py-10 text-ui-text">
       <a
