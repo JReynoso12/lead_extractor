@@ -166,8 +166,6 @@ export default function Home() {
     URL.revokeObjectURL(url);
   }
 
-  const hasResult = Boolean(result);
-  const hasLeads = Boolean(result && result.leads.length > 0);
   const providerLabel =
     result?.provider === "openstreetmap" ? "OpenStreetMap" : "Google Maps";
 
@@ -270,13 +268,13 @@ export default function Home() {
           </section>
         ) : null}
 
-        {!hasResult && !loading && !error ? (
+        {!result && !loading && !error ? (
           <section className="ui-surface mt-4 p-5 text-sm text-ui-muted">
             Submit search parameters to generate your first batch of leads.
           </section>
         ) : null}
 
-        {hasResult ? (
+        {result ? (
           <section className="mt-6 space-y-4">
             <div className="ui-surface flex flex-wrap items-center justify-between gap-3 p-4 text-sm">
               <p className="text-ui-muted">
@@ -291,7 +289,7 @@ export default function Home() {
                   type="button"
                   onClick={copyEmails}
                   className="ui-button-secondary"
-                  disabled={!hasLeads}
+                  disabled={result.leads.length === 0}
                 >
                   Copy Emails ({emailCount})
                 </button>
@@ -299,7 +297,7 @@ export default function Home() {
                   type="button"
                   onClick={downloadCsv}
                   className="ui-button-secondary inline-flex items-center gap-2"
-                  disabled={!hasLeads}
+                  disabled={result.leads.length === 0}
                 >
                   <Download size={14} />
                   Download CSV
@@ -307,7 +305,7 @@ export default function Home() {
               </div>
             </div>
 
-            {hasLeads ? (
+            {result.leads.length > 0 ? (
               <div className="ui-surface overflow-hidden">
                 <div className="overflow-auto">
                   <table className="min-w-full text-left text-sm">
