@@ -24,6 +24,66 @@ type LeadResponse = {
 export default function Home() {
   type ProgressStep = "extract" | "enrich" | "validate";
 
+  const EXPORTED_LEADS_STORAGE_KEY = "exported_lead_keys_v1";
+
+  function normalizePhone(phone: string): string {
+    return phone.replace(/[^\d+]/g, "");
+  }
+
+  function websiteHost(website: string): string {
+    return website
+      .replace(/^https?:\/\//, "")
+      .replace(/^www\./, "")
+      .split("/")[0]
+      .toLowerCase();
+  }
+
+  // Keep this key aligned with `getDedupKey()` in `src/lib/lead-cleaner.ts`.
+  function getLeadKey(lead: Lead): string {
+    const name = lead.business_name.trim().toLowerCase();
+    const address = lead.address.trim().toLowerCase();
+    const phone = normalizePhone(lead.phone);
+    const host = websiteHost(lead.website);
+    return `${name}|${address}|${host}|${phone}`;
+  }
+
+  function loadExportedLeadKeys(): Set<string> {
+    if (typeof window === "undefined") return new Set();
+    try {
+      const raw = window.localStorage.getItem(
+        EXPORTED_LEADS_STORAGE_KEY,
+      );
+      if (!raw) return new Set();
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return new Set();
+      return new Set(parsed.map((x) => String(x)));
+    } catch {
+      return new Set();
+    }
+  }
+
+  function persistExportedLeadKeys(keys: Set<string>) {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(
+        EXPORTED_LEADS_STORAGE_KEY,
+        JSON.stringify(Array.from(keys)),
+      );
+    } catch {
+      // If localStorage is blocked/unavailable, we just won't persist across runs.
+    }
+  }
+
+  function markLeadsAsExported(leads: Lead[]) {
+    const keys = loadExportedLeadKeys();
+    for (const lead of leads) {
+      // Skip obviously incomplete rows to avoid storing junk keys.
+      if (!lead.business_name || !lead.address) continue;
+      keys.add(getLeadKey(lead));
+    }
+    persistExportedLeadKeys(keys);
+  }
+
   const [businessCategory, setBusinessCategory] = useState("");
   const [location, setLocation] = useState("");
   const [maxResults, setMaxResults] = useState(100);
@@ -66,7 +126,19 @@ export default function Home() {
       if (!response.ok) {
         throw new Error(data.error || "Failed to extract and clean leads.");
       }
-      setResult(data as LeadResponse);
+
+      // Filter out leads that were already exported on previous runs.
+      const exportedKeys = loadExportedLeadKeys();
+      const incoming = data as LeadResponse;
+      const filteredLeads = incoming.leads.filter(
+        (lead) => !exportedKeys.has(getLeadKey(lead)),
+      );
+
+      setResult({
+        ...incoming,
+        total_cleaned: filteredLeads.length,
+        leads: filteredLeads,
+      });
       setCompletedSteps(new Set(["extract", "enrich", "validate"]));
     } catch (err) {
       const message =
@@ -134,6 +206,8 @@ export default function Home() {
       .filter(Boolean)
       .join("\n");
     navigator.clipboard.writeText(emails);
+    // Copy is also an "export" action, so mark these leads as exported.
+    markLeadsAsExported(result.leads);
   }
 
   function downloadCsv() {
@@ -164,6 +238,8 @@ export default function Home() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+    // Downloading CSV is the user's main "export" action.
+    markLeadsAsExported(result.leads);
   }
 
   const providerLabel =
